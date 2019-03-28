@@ -215,15 +215,19 @@ namespace ProjectLoader.Util
                     string pathToZip = "";
                     pathToZip = theEntry.Name;
 
-                    if (pathToZip != "")
+                    string fileName = string.Empty;
+                    if (pathToZip.Contains("\\"))
                     {
-                        directoryName = Path.GetDirectoryName(pathToZip);
+                        directoryName = pathToZip.Split(new string[] { "\\" }, StringSplitOptions.None)[0];
+                        fileName = pathToZip.Split(new string[] { "\\" }, StringSplitOptions.None)[1];
+
+                        Directory.CreateDirectory(Path.Combine(strDirectory, directoryName));
                     }
-
-                    string fileName = Path.GetFileName(pathToZip);
-
-                    Directory.CreateDirectory(Path.Combine(strDirectory, directoryName));
-
+                    else
+                    {
+                        fileName = pathToZip;
+                    }                    
+                    
                     if (fileName != "")
                     {
                         string destFile = Path.Combine(Path.Combine(strDirectory, directoryName), fileName);
