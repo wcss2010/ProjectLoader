@@ -15,6 +15,7 @@ using ProjectLoader.Util;
 using System.Text.RegularExpressions;
 using ProjectLoader.Forms;
 using System.Diagnostics;
+using Mono.Data.Sqlite;
 
 namespace ProjectLoader
 {
@@ -310,7 +311,7 @@ namespace ProjectLoader
         public static void ImportData(string tempSqliteFile)
         {
             //打开SQLite数据库连接
-            System.Data.SQLite.SQLiteFactory factory = new System.Data.SQLite.SQLiteFactory();
+            SqliteFactory factory = new SqliteFactory();
             DbContext context = new DbContext("main", "Data Source=" + tempSqliteFile, factory);
             context.IsSupportInsertAfterSelectIdentity = false;
 
@@ -826,7 +827,7 @@ namespace ProjectLoader
             finally
             {
                 //关闭数据库
-                factory.Dispose();
+                //factory.Dispose();
                 factory = null;
                 context = null;
             }
