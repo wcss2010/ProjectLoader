@@ -199,12 +199,11 @@ namespace ProjectLoader.Util
         /// <param name="overWrite">是否覆盖已存在的文件。</param>
         public void UnZipFile(string zipedFile, string strDirectory, string password, bool overWrite)
         {
-
             if (strDirectory == "")
+            {
                 strDirectory = Directory.GetCurrentDirectory();
-            if (!strDirectory.EndsWith("\\"))
-                strDirectory = strDirectory + "\\";
-
+            }
+            
             using (ZipInputStream s = new ZipInputStream(File.OpenRead(zipedFile)))
             {
                 s.Password = password;
@@ -217,17 +216,20 @@ namespace ProjectLoader.Util
                     pathToZip = theEntry.Name;
 
                     if (pathToZip != "")
-                        directoryName = Path.GetDirectoryName(pathToZip) + "\\";
+                    {
+                        directoryName = Path.GetDirectoryName(pathToZip);
+                    }
 
                     string fileName = Path.GetFileName(pathToZip);
 
-                    Directory.CreateDirectory(strDirectory + directoryName);
+                    Directory.CreateDirectory(Path.Combine(strDirectory, directoryName));
 
                     if (fileName != "")
                     {
-                        if ((File.Exists(strDirectory + directoryName + fileName) && overWrite) || (!File.Exists(strDirectory + directoryName + fileName)))
+                        string destFile = Path.Combine(Path.Combine(strDirectory, directoryName), fileName);
+                        if ((File.Exists(destFile) && overWrite) || (!File.Exists(destFile)))
                         {
-                            using (FileStream streamWriter = File.Create(strDirectory + directoryName + fileName))
+                            using (FileStream streamWriter = File.Create(destFile))
                             {
                                 int size = 2048;
                                 byte[] data = new byte[2048];
